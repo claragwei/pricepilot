@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+dist/
+*.egg-info/
+
+# Secrets
+.env
+*.pem
+
+# Data (generated / downloaded; never commit)
+data/raw/*
+data/interim/*
+data/processed/*
+!data/*/.gitkeep
+*.parquet
+*.duckdb
+*.sqlite
+
+# MLOps artifacts
+mlruns/
+mlartifacts/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

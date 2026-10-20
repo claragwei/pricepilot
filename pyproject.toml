@@ -5,6 +5,7 @@ description = "Explainable pricing decision-support platform (research-grade, si
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "duckdb>=1.5.6",
     "pydantic>=2.8",
     "pyyaml>=6.0",
 ]
@@ -29,6 +30,7 @@ packages = ["src/pricepilot"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = "-ra --strict-markers"
 
 [tool.ruff]

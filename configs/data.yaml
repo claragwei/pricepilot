@@ -1,0 +1,19 @@
+category: cereal
+source_dir: raw/cereal
+movement_file: wcer.csv
+upc_file: upccer.csv
+week_decode_file: reference/week_decode.csv
+output_dir: processed/cereal
+rejects_dir: interim/cereal
+
+price_bounds:
+  min: 0.01
+  max: 50.0
+
+# Pipeline fails if more than this share of movement rows is rejected.
+max_reject_rate: 0.40
+
+sample:
+  stores: [2, 5, 8]
+  first_week: 300
+  last_week: 399

@@ -28,6 +28,23 @@ WAPE, lift vs. seasonal-naive, segment performance) · Pricing policy (simulated
 profit/revenue, stockouts, price-change stats, sensitivity) · RAG (Recall@k, citation
 correctness, faithfulness, unsupported-answer rate) · App (API success/latency).
 
+## Milestones
+0 repo · 
+1 data foundation · 
+1b analytics engineering (dbt on DuckDB, tests, docs,
+semantic-layer metrics, freshness/volume/reconciliation checks) · 
+2 statistical model
+(features from dbt marts, backtesting) · 
+3 pricing engine · 
+4 MLOps and orchestration
+(MLflow tracking/registry, Dagster, drift check) · 
+5 API and app (Docker) · 
+6 RAG · 
+7 dashboard · 
+
+Stretch, only after the core is done: a second data source with entity resolution.
+Snowflake, Databricks and GCP are out of scope; the README may note how the work maps to them.
+
 ## Constraints
 $0 budget; everything runs locally; cloud/BI are optional extras.
 

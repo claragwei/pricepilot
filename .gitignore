@@ -30,3 +30,10 @@ mlartifacts/
 .DS_Store
 .vscode/
 .idea/
+
+# dbt artifacts
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+logs/
+dbt/.user.yml

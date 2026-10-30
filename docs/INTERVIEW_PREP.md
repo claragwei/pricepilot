@@ -65,6 +65,12 @@ Committed as `b5abe1d` (2026-10-16). Source: that commit and decisions 1 to 5 in
 | Environment | `docker --version`, `docker info` | Docker daemon is running |
 | Code still healthy | `ruff check`, `ruff format --check`, `mypy`, `pytest` | Lint clean, types clean, 34 tests passed |
 
+### Slice 1a: Postgres container and dbt skeleton
+- **Built:** `docker-compose.yml` (Postgres 16, bound to localhost only, with a healthcheck and a named volume), a minimal dbt project in `dbt/`, and `dbt/profiles.yml` with a Postgres target and a Snowflake target. All credentials come from environment variables.
+- **Verified:** `docker compose up -d`, the container reported `healthy`, and `uv run dbt debug --project-dir dbt --profiles-dir dbt` ended with "Connection test: OK" and "All checks passed!". The Snowflake target has not been tested yet.
+- **A real problem and how it was handled:** port 5432 was already in use by a process I couldn't identify, and `docker compose up` failed with "address already in use". I didn't kill it; I moved the project to port 5433 and recorded it as decision 52.
+- **Concepts:** a healthcheck tells you the database is ready for connections, not just that the container started; a named volume keeps data when the container is recreated; binding to `127.0.0.1` keeps the database off the network; `env_var()` in dbt keeps secrets out of files.
+
 ### Concepts to be able to explain
 - **Raw / landing layer (bronze):** keep source data untouched so any number can be traced back. Cleaning happens in later layers.
 - **Checksum:** a hash of a file's bytes. Same hash means same content. It detects corruption and proves a re-download matches.

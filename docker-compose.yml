@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pricepilot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pricepilot}
+      POSTGRES_DB: ${POSTGRES_DB:-pricepilot}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pricepilot} -d ${POSTGRES_DB:-pricepilot}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

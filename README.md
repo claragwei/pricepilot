@@ -3,7 +3,7 @@
 Explainable pricing decision-support: demand forecasting, constrained price
 optimization, policy simulation, MLOps tracking, and a RAG research assistant.
 
-> **Status:** the pipeline design is finalized (see `docs/ARCHITECTURE.md`). Milestone 1 (data foundation) is in progress: all 28 Dominick's categories are downloaded, gzipped, and checksummed; Docker, a Snowflake trial, and dbt are installed; the dbt models are not built yet. The cereal ingest and forecaster code exist from earlier work and will be reworked.
+> **Status:** the pipeline design is finalized (see `docs/ARCHITECTURE.md`). Milestone 1 (data foundation) is in progress: all 28 Dominick's categories are downloaded, gzipped, and checksummed; Docker, a Snowflake trial, and dbt are installed; a local Postgres container and an empty dbt project connect (`dbt debug` passes); the dbt models are not built yet. The cereal ingest and forecaster code exist from earlier work and will be reworked.
 > All profit figures will be **simulated**, never real-world impact.
 
 See `docs/ARCHITECTURE.md` for the system diagram and how backtesting works.
@@ -31,6 +31,17 @@ uv run python -m pricepilot.data.pipeline            # full run (~10 s)
 ```
 
 Outputs go to `data/processed/cereal/` (Parquet tables, `quality_report.json`, `run_log.jsonl`); rejected rows go to `data/interim/cereal/`.
+
+## Warehouse (Milestone 1, in progress)
+
+Postgres runs in Docker and dbt builds the models; the dbt project is in `dbt/`.
+
+```bash
+docker compose up -d                                   # start Postgres on localhost:5433
+uv run dbt debug --project-dir dbt --profiles-dir dbt  # check the connection
+```
+
+Snowflake credentials are read from `SNOWFLAKE_*` environment variables (see `.env.example`); nothing secret is stored in the repo.
 
 ## Forecasting
 

@@ -1,0 +1,22 @@
+pricepilot:
+  target: postgres
+  outputs:
+    postgres:
+      type: postgres
+      host: localhost
+      port: "{{ env_var('POSTGRES_PORT', '5433') | as_number }}"
+      user: "{{ env_var('POSTGRES_USER', 'pricepilot') }}"
+      password: "{{ env_var('POSTGRES_PASSWORD', 'pricepilot') }}"
+      dbname: "{{ env_var('POSTGRES_DB', 'pricepilot') }}"
+      schema: analytics
+      threads: 4
+    snowflake:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'ACCOUNTADMIN') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'COMPUTE_WH') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'PRICEPILOT') }}"
+      schema: analytics
+      threads: 4

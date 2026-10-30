@@ -63,3 +63,51 @@ class DataConfig(BaseModel):
 def load_data_config(path: Path | None = None) -> DataConfig:
     """Load and validate configs/data.yaml (or the given file)."""
     return DataConfig(**load_yaml(path or PROJECT_ROOT / "configs" / "data.yaml"))
+
+
+class FoldConfig(BaseModel):
+    """One backtest split: training labels up to train_end, scored on test_start..test_end."""
+
+    train_end: int
+    test_start: int
+    test_end: int
+
+
+class LightGBMConfig(BaseModel):
+    """LightGBM hyperparameters (Poisson objective)."""
+
+    n_estimators: int
+    learning_rate: float
+    num_leaves: int
+    min_child_samples: int
+    feature_fraction: float
+    bagging_fraction: float
+    seed: int
+
+
+class GLMConfig(BaseModel):
+    """Poisson regression settings, including a cap on training rows for speed."""
+
+    alpha: float
+    max_iter: int
+    max_train_rows: int
+    seed: int
+
+
+class ForecastConfig(BaseModel):
+    """Forecaster settings; input and output directories are relative to the data directory."""
+
+    dataset: str
+    input_dir: str
+    output_dir: str
+    horizons: list[int]
+    season_lag: int
+    folds: list[FoldConfig]
+    final_test: FoldConfig
+    lightgbm: LightGBMConfig
+    glm: GLMConfig
+
+
+def load_forecast_config(path: Path | None = None) -> ForecastConfig:
+    """Load and validate configs/forecast.yaml (or the given file)."""
+    return ForecastConfig(**load_yaml(path or PROJECT_ROOT / "configs" / "forecast.yaml"))

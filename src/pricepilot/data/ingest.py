@@ -75,12 +75,12 @@ def locate_sources(cfg: DataConfig, root: Path) -> SourceFiles:
     return SourceFiles(movement, upc, week_decode, version, manifest)
 
 
-def _quote(value: Path | str) -> str:
+def quote_literal(value: Path | str) -> str:
     """Quote a value as a SQL string literal."""
     return "'" + str(value).replace("'", "''") + "'"
 
 
-def _check_columns(
+def check_columns(
     con: duckdb.DuckDBPyConnection, read_sql: str, required: set[str], label: str
 ) -> None:
     """Fail clearly if a CSV lacks any required column."""
@@ -98,15 +98,18 @@ def register_raw(
 ) -> None:
     """Create raw_movement, raw_upc, and raw_week_decode views over the source CSVs."""
     types = ", ".join(f"{k!r}: {v!r}" for k, v in MOVEMENT_TYPES.items())
-    movement_read = f"read_csv({_quote(sources.movement)}, header=true, types={{{types}}})"
-    upc_read = f"read_csv({_quote(sources.upc)}, header=true, encoding='latin-1')"
-    week_read = f"read_csv({_quote(sources.week_decode)}, header=true)"
+    movement_read = f"read_csv({quote_literal(sources.movement)}, header=true, types={{{types}}})"
+    upc_read = f"read_csv({quote_literal(sources.upc)}, header=true, encoding='latin-1')"
+    week_read = f"read_csv({quote_literal(sources.week_decode)}, header=true)"
 
-    _check_columns(
-        con, f"read_csv({_quote(sources.movement)}, header=true)", set(MOVEMENT_TYPES), "movement"
+    check_columns(
+        con,
+        f"read_csv({quote_literal(sources.movement)}, header=true)",
+        set(MOVEMENT_TYPES),
+        "movement",
     )
-    _check_columns(con, upc_read, UPC_COLUMNS, "UPC")
-    _check_columns(con, week_read, WEEK_DECODE_COLUMNS, "week decode")
+    check_columns(con, upc_read, UPC_COLUMNS, "UPC")
+    check_columns(con, week_read, WEEK_DECODE_COLUMNS, "week decode")
 
     where = ""
     if sample:

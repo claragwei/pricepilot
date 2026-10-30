@@ -5,9 +5,14 @@ description = "Explainable pricing decision-support platform (research-grade, si
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "dbt-core>=1.12.6",
+    "dbt-postgres>=1.11.0",
+    "dbt-snowflake>=1.12.4",
     "duckdb>=1.5.6",
+    "lightgbm>=4.7.0",
     "pydantic>=2.8",
     "pyyaml>=6.0",
+    "scikit-learn>=1.9.1",
 ]
 
 [dependency-groups]
@@ -44,3 +49,7 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 python_version = "3.12"
 strict = true
 files = ["src"]
+
+[[tool.mypy.overrides]]
+module = ["joblib.*", "lightgbm.*", "sklearn.*"]
+ignore_missing_imports = true

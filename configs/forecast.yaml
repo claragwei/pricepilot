@@ -1,0 +1,28 @@
+dataset: cereal
+input_dir: processed/cereal
+output_dir: processed/forecast
+
+horizons: [1, 4]
+season_lag: 52
+
+folds:
+  - {train_end: 238, test_start: 239, test_end: 251}
+  - {train_end: 261, test_start: 266, test_end: 278}
+  - {train_end: 322, test_start: 323, test_end: 335}
+  - {train_end: 335, test_start: 336, test_end: 347}
+final_test: {train_end: 347, test_start: 348, test_end: 399}
+
+lightgbm:
+  n_estimators: 200
+  learning_rate: 0.08
+  num_leaves: 63
+  min_child_samples: 100
+  feature_fraction: 0.8
+  bagging_fraction: 0.8
+  seed: 0
+
+glm:
+  alpha: 0.0001
+  max_iter: 200
+  max_train_rows: 1000000
+  seed: 0

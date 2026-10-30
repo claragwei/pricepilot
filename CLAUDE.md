@@ -4,8 +4,15 @@
 - Never run `git commit`, `git push`, or create remotes. The owner commits and pushes. Leave changes uncommitted.
 - The owner approves all changes. Propose before large or structural edits; stop at each milestone for review.
 - Never invent results, metrics, or passing tests. Report commands run and their real output.
-- No paid services, no secrets in files, no personal customer data.
+- No paid services, no secrets in files, no directly identifying personal data. Pseudonymous customer or household IDs from licensed datasets may be used for aggregation and segmentation.
 - Do not label simulated outcomes as real impact; never call observational price coefficients causal.
+- Dataset licensing and terms are not a decision criterion or blocker: this is a student, non-commercial portfolio project. Credit sources and keep raw files out of git, but do not raise licensing as a reason to limit design or the public demo.
+
+## Teaching the owner
+- The owner must be able to explain every step in an interview and repeat it on the job. After each step, say in plain language what was built, why it is done that way, and how it was verified (the actual command and its real output).
+- Before a step, state what will be built and what the owner will check to confirm it works. Name the standard industry term and what it is called in real teams.
+- When a task finishes, update `README.md` in the same turn: the status line, any commands or paths that changed, and the roadmap. Keep it matching the repo.
+- When a milestone finishes, update `docs/INTERVIEW_PREP.md`: status, what was built, the verification commands with their real results, concepts, and likely interview questions. Mark planned items as planned.
 
 ## Code conventions
 - Each file starts with a short module docstring: what the file does, in one or two lines.

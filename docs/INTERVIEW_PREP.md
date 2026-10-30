@@ -71,6 +71,15 @@ Committed as `b5abe1d` (2026-10-16). Source: that commit and decisions 1 to 5 in
 - **A real problem and how it was handled:** port 5432 was already in use by a process I couldn't identify, and `docker compose up` failed with "address already in use". I didn't kill it; I moved the project to port 5433 and recorded it as decision 52.
 - **Concepts:** a healthcheck tells you the database is ready for connections, not just that the container started; a named volume keeps data when the container is recreated; binding to `127.0.0.1` keeps the database off the network; `env_var()` in dbt keeps secrets out of files.
 
+### Slice 1b: raw loader into Postgres
+- **Built:** `pricepilot.warehouse.load_raw` streams each gzipped CSV into a Postgres table with `COPY`. `stream.py` does the reading: it matches columns by header name, drops the two hex columns, hashes the bytes, and counts rows. Settings are in `configs/warehouse.yaml`.
+- **Checks built into the loader:** the decompressed SHA-256 must equal the recorded checksum, and the table's row count must equal the rows read. If either fails, that file's load rolls back. Every load is logged in `raw._load_log`.
+- **Verified (cereal and bathroom tissues, real run):** loaded 6,602,582 rows (`wcer`), 1,627,284 (`wtti`), 490 (`upccer`), and 128 (`upctti`). Row counts match `gzip -dc | wc -l` minus the header for all four. A source row for `wtti` (store 14, UPC 3700060311, weeks 343 to 345) matches the table value for value. Cereal loaded in 9.2 s, tissues in 2.2 s. The other 26 categories are not loaded yet.
+- **Tests:** 6 unit tests for the stream, and 2 integration tests against the real Postgres container (types and counts, and rollback on a checksum mismatch). The integration tests skip with a message if Postgres isn't running.
+- **A real trap avoided:** movement files come in three column orders (`UPC` first in four categories, `PRICE` before `QTY` in two). Loading by position would have swapped columns silently, with no error. Tissues has the `PRICE`-before-`QTY` order, and its loaded values are correct.
+- **Concepts:** `COPY` is the fast bulk-load path in Postgres; streaming means a 458 MB file never sits in memory; verifying hash and row count in the same transaction means a bad file never becomes a table; header-based column mapping is how you survive inconsistent exports.
+- **Questions to be ready for:** *How do you know the load is correct?* Hash, row count against an independent `wc -l`, and a spot check of a source row. *Why drop columns in the raw layer?* They duplicate PRICE and PROFIT, would cost about 5 GB, and the original files remain.
+
 ### Concepts to be able to explain
 - **Raw / landing layer (bronze):** keep source data untouched so any number can be traced back. Cleaning happens in later layers.
 - **Checksum:** a hash of a file's bytes. Same hash means same content. It detects corruption and proves a re-download matches.

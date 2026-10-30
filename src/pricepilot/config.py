@@ -111,3 +111,26 @@ class ForecastConfig(BaseModel):
 def load_forecast_config(path: Path | None = None) -> ForecastConfig:
     """Load and validate configs/forecast.yaml (or the given file)."""
     return ForecastConfig(**load_yaml(path or PROJECT_ROOT / "configs" / "forecast.yaml"))
+
+
+class MovementColumns(BaseModel):
+    """Movement-file columns to load with their Postgres types, and columns to skip."""
+
+    keep: dict[str, str]
+    drop: list[str]
+
+
+class WarehouseConfig(BaseModel):
+    """Raw-load settings; file paths are relative to the data directory."""
+
+    raw_dir: str
+    checksum_file: str
+    raw_schema: str
+    categories: list[str]
+    movement: MovementColumns
+    upc: dict[str, str]
+
+
+def load_warehouse_config(path: Path | None = None) -> WarehouseConfig:
+    """Load and validate configs/warehouse.yaml (or the given file)."""
+    return WarehouseConfig(**load_yaml(path or PROJECT_ROOT / "configs" / "warehouse.yaml"))

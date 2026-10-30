@@ -10,6 +10,7 @@ dependencies = [
     "dbt-snowflake>=1.12.4",
     "duckdb>=1.5.6",
     "lightgbm>=4.7.0",
+    "psycopg2-binary>=2.9.13",
     "pydantic>=2.8",
     "pyyaml>=6.0",
     "scikit-learn>=1.9.1",
@@ -24,6 +25,7 @@ dev = [
     "mypy>=1.11",
     "types-PyYAML",
     "pre-commit>=3.8",
+    "types-psycopg2>=2.9.21.20261008",
 ]
 
 [build-system]

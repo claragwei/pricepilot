@@ -1,0 +1,30 @@
+raw_dir: raw
+checksum_file: raw/CHECKSUMS.sha256
+raw_schema: raw
+
+categories: [ana, bat, ber, bjc, cer, che, cig, coo, cra, cso, did, fec, frd, fre, frj,
+  fsf, gro, lnd, oat, ptw, sdr, sha, sna, soa, tbr, tna, tpa, tti]
+
+# Movement files differ in column order, so columns are matched by name.
+# The hex columns duplicate PRICE and PROFIT at full precision and are not loaded.
+movement:
+  keep:
+    STORE: smallint
+    UPC: bigint
+    WEEK: smallint
+    MOVE: integer
+    QTY: integer
+    PRICE: numeric
+    SALE: text
+    PROFIT: numeric
+    OK: smallint
+  drop: [PRICE_HEX, PROFIT_HEX]
+
+upc:
+  COM_CODE: integer
+  UPC: bigint
+  DESCRIP: text
+  SIZE: text
+  CASE: integer
+  NITEM: bigint
+  WSTART: smallint

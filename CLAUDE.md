@@ -12,6 +12,7 @@
 - The owner must be able to explain every step in an interview and repeat it on the job. After each step, say in plain language what was built, why it is done that way, and how it was verified (the actual command and its real output).
 - Before a step, state what will be built and what the owner will check to confirm it works. Name the standard industry term and what it is called in real teams.
 - When a task finishes, update `README.md` in the same turn: the status line, any commands or paths that changed, and the roadmap. Keep it matching the repo.
+- When a stage or slice finishes, add a one-page diagram to `docs/stages/`: `<stage-name>.html` (inline SVG boxes and arrows, then "Why" and "How we checked it" lists, facts taken only from real results) and its PDF, printed with `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless --disable-gpu --no-pdf-header-footer --print-to-pdf=<name>.pdf file://<path>/<name>.html`. Copy an existing page as the template, check that it is one page and no text overflows its box, and keep the HTML next to the PDF.
 - When a milestone finishes, update `docs/INTERVIEW_PREP.md`: status, what was built, the verification commands with their real results, concepts, and likely interview questions. Mark planned items as planned.
 
 ## Code conventions

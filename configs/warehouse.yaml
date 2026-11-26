@@ -27,4 +27,4 @@ upc:
   SIZE: text
   CASE: integer
   NITEM: bigint
-  WSTART: smallint
+  WSTART: integer

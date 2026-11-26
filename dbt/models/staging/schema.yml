@@ -1,0 +1,111 @@
+version: 2
+
+models:
+  - name: stg_dominicks__movement_classified
+    description: All raw movement rows with a reject_reason (null means the row is kept).
+    columns:
+      - name: reject_reason
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [incomplete_row, ok_flag_zero, no_sale_recorded]
+              config:
+                where: reject_reason is not null
+
+  - name: stg_dominicks__movement
+    description: >
+      Valid weekly sales. Rows with OK = 0 or no recorded sale are removed.
+      Missing weeks are not filled in.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [category, store, upc, week]
+    columns:
+      - name: store
+        data_tests: [not_null]
+      - name: upc
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_dominicks__products')
+                field: upc
+              config:
+                severity: warn
+      - name: week
+        data_tests: [not_null]
+      - name: units_sold
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+      - name: bundle_qty
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: ">= 1"
+      - name: bundle_price
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "> 0"
+      - name: gross_margin_pct
+        description: Gross margin in percent; null where missing, 0 or 100 and above. Negative values are kept.
+        data_tests:
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "< 100"
+              config:
+                where: gross_margin_pct is not null
+      - name: promo_code
+        description: Source sale code. The manual lists B, C and S only; G and L also occur.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [B, C, S]
+              config:
+                severity: warn
+                where: promo_code is not null
+
+  - name: stg_dominicks__movement_rejects
+    description: Rows removed from stg_dominicks__movement, with the reason.
+    columns:
+      - name: reject_reason
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [incomplete_row, ok_flag_zero, no_sale_recorded]
+
+  - name: stg_dominicks__products
+    description: Product descriptions, one row per category and UPC.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [category, upc]
+    columns:
+      - name: upc
+        data_tests: [not_null]
+
+unit_tests:
+  - name: classifies_and_cleans_rows
+    description: Drops incomplete, OK = 0 and no-sale rows, nulls a zero margin, and computes bundle prices.
+    model: stg_dominicks__movement_classified
+    overrides:
+      vars:
+        movement_categories: [cer]
+    given:
+      - input: source('raw', 'wcer')
+        rows:
+          - {store: 1, upc: 10, week: 1, move: 4, qty: 1, price: 2.00, profit: 20.0, sale: "", ok: 1}
+          - {store: 1, upc: 10, week: 2, move: 6, qty: 3, price: 2.00, profit: 0, sale: B, ok: 1}
+          - {store: 1, upc: 10, week: 3, move: 0, qty: 1, price: 0, profit: 0, sale: "", ok: 1}
+          - {store: 1, upc: 10, week: 4, move: 5, qty: 1, price: 2.00, profit: 20.0, sale: "", ok: 0}
+          - {store: null, upc: 11, week: null, move: null, qty: null, price: null, profit: null, sale: null, ok: null}
+    expect:
+      rows:
+        - {category: cer, week: 1, units_sold: 4, bundle_price: 2.00, promo_code: null, reject_reason: null}
+        - {category: cer, week: 2, units_sold: 6, bundle_price: 2.00, promo_code: B, reject_reason: null}
+        - {category: cer, week: 3, units_sold: 0, bundle_price: 0, promo_code: null, reject_reason: no_sale_recorded}
+        - {category: cer, week: 4, units_sold: 5, bundle_price: 2.00, promo_code: null, reject_reason: ok_flag_zero}
+        - {category: cer, week: null, units_sold: null, bundle_price: null, promo_code: null, reject_reason: incomplete_row}

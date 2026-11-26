@@ -9,3 +9,19 @@ macro-paths: ["macros"]
 
 target-path: target
 clean-targets: ["target", "dbt_packages"]
+
+vars:
+  movement_categories: [ana, bat, ber, bjc, cer, che, cig, coo, cra, cso, did, fec, frd, fre, frj, fsf, gro, lnd, oat, ptw, sdr, sha, sna, soa, tbr, tna, tpa, tti]
+  max_reject_share_ok_flag_zero: 0.10
+  max_reject_share_no_sale_recorded: 0.85
+
+models:
+  pricepilot:
+    staging:
+      +materialized: view
+      stg_dominicks__products:
+        +materialized: table
+
+data_tests:
+  pricepilot:
+    +store_failures: true

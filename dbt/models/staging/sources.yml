@@ -1,0 +1,119 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Dominick's files loaded unchanged by pricepilot.warehouse.load_raw.
+    schema: raw
+    tables:
+      - name: wana
+        description: Weekly movement, category code ana.
+      - name: upcana
+        description: Product descriptions, category code ana.
+      - name: wbat
+        description: Weekly movement, category code bat.
+      - name: upcbat
+        description: Product descriptions, category code bat.
+      - name: wber
+        description: Weekly movement, category code ber.
+      - name: upcber
+        description: Product descriptions, category code ber.
+      - name: wbjc
+        description: Weekly movement, category code bjc.
+      - name: upcbjc
+        description: Product descriptions, category code bjc.
+      - name: wcer
+        description: Weekly movement, category code cer.
+      - name: upccer
+        description: Product descriptions, category code cer.
+      - name: wche
+        description: Weekly movement, category code che.
+      - name: upcche
+        description: Product descriptions, category code che.
+      - name: wcig
+        description: Weekly movement, category code cig.
+      - name: upccig
+        description: Product descriptions, category code cig.
+      - name: wcoo
+        description: Weekly movement, category code coo.
+      - name: upccoo
+        description: Product descriptions, category code coo.
+      - name: wcra
+        description: Weekly movement, category code cra.
+      - name: upccra
+        description: Product descriptions, category code cra.
+      - name: wcso
+        description: Weekly movement, category code cso.
+      - name: upccso
+        description: Product descriptions, category code cso.
+      - name: wdid
+        description: Weekly movement, category code did.
+      - name: upcdid
+        description: Product descriptions, category code did.
+      - name: wfec
+        description: Weekly movement, category code fec.
+      - name: upcfec
+        description: Product descriptions, category code fec.
+      - name: wfrd
+        description: Weekly movement, category code frd.
+      - name: upcfrd
+        description: Product descriptions, category code frd.
+      - name: wfre
+        description: Weekly movement, category code fre.
+      - name: upcfre
+        description: Product descriptions, category code fre.
+      - name: wfrj
+        description: Weekly movement, category code frj.
+      - name: upcfrj
+        description: Product descriptions, category code frj.
+      - name: wfsf
+        description: Weekly movement, category code fsf.
+      - name: upcfsf
+        description: Product descriptions, category code fsf.
+      - name: wgro
+        description: Weekly movement, category code gro.
+      - name: upcgro
+        description: Product descriptions, category code gro.
+      - name: wlnd
+        description: Weekly movement, category code lnd.
+      - name: upclnd
+        description: Product descriptions, category code lnd.
+      - name: woat
+        description: Weekly movement, category code oat.
+      - name: upcoat
+        description: Product descriptions, category code oat.
+      - name: wptw
+        description: Weekly movement, category code ptw.
+      - name: upcptw
+        description: Product descriptions, category code ptw.
+      - name: wsdr
+        description: Weekly movement, category code sdr.
+      - name: upcsdr
+        description: Product descriptions, category code sdr.
+      - name: wsha
+        description: Weekly movement, category code sha.
+      - name: upcsha
+        description: Product descriptions, category code sha.
+      - name: wsna
+        description: Weekly movement, category code sna.
+      - name: upcsna
+        description: Product descriptions, category code sna.
+      - name: wsoa
+        description: Weekly movement, category code soa.
+      - name: upcsoa
+        description: Product descriptions, category code soa.
+      - name: wtbr
+        description: Weekly movement, category code tbr.
+      - name: upctbr
+        description: Product descriptions, category code tbr.
+      - name: wtna
+        description: Weekly movement, category code tna.
+      - name: upctna
+        description: Product descriptions, category code tna.
+      - name: wtpa
+        description: Weekly movement, category code tpa.
+      - name: upctpa
+        description: Product descriptions, category code tpa.
+      - name: wtti
+        description: Weekly movement, category code tti.
+      - name: upctti
+        description: Product descriptions, category code tti.
